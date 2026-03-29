@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Agora Project</title>
+    <meta name="description" content="The Agora Project — SAT and ACT prep with separate dashboards, adaptive schedules, and full-length practice tests." />
+    <meta property="og:title" content="The Agora Project" />
+    <meta property="og:description" content="SAT and ACT prep with separate dashboards, adaptive schedules, and full-length practice tests." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The Agora Project" />
+    <meta property="og:image" content="/og-image-1200x630.png" />
+    <meta property="og:image:secure_url" content="/og-image-1200x630.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Agora Project" />
+    <meta name="twitter:description" content="SAT and ACT prep with separate dashboards, adaptive schedules, and full-length practice tests." />
+    <meta name="twitter:image" content="/og-image-1200x630.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root">
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#64748b;">
+        Loading…
+      </div>
+    </div>
+    <script>
+      // Capture early JS/module errors (helps diagnose blank screens on iOS).
+      (function () {
+        try {
+          window.__agoraLastError = null;
+          window.__agoraAppBooted = false;
+          window.addEventListener('error', function (e) {
+            try {
+              var msg = (e && (e.message || (e.error && e.error.message))) || String(e || '');
+              window.__agoraLastError = msg;
+            } catch {}
+          });
+          window.addEventListener('unhandledrejection', function (e) {
+            try { window.__agoraLastError = String((e && e.reason) || e || ''); } catch {}
+          });
+
+          window.agoraFixAndReload = async function () {
+            try {
+              if ('serviceWorker' in navigator) {
+                var regs = await navigator.serviceWorker.getRegistrations();
+                await Promise.all((regs || []).map(function (r) { try { return r.unregister(); } catch { return null; } }));
+              }
+            } catch {}
+            try {
+              if ('caches' in window) {
+                var keys = await caches.keys();
+                await Promise.all((keys || []).map(function (k) { try { return caches.delete(k); } catch { return null; } }));
+              }
+            } catch {}
+            try { location.reload(); } catch {}
+          };
+        } catch {}
+      })();
+
+      // Fallback if the app bundle fails to load (e.g., a stale service worker cache).
+      setTimeout(function () {
+        try {
+          var root = document.getElementById('root');
+          if (!root) return;
+          if (window.__agoraAppBooted) return;
+          // Self-heal once by clearing SW + caches, then reloading.
+          try {
+            var did = localStorage.getItem('agora_autofix_once_v1');
+            if (!did && navigator && navigator.onLine && window.agoraFixAndReload) {
+              localStorage.setItem('agora_autofix_once_v1', '1');
+              window.agoraFixAndReload();
+              return;
+            }
+          } catch {}
+          var err = '';
+          try { err = window.__agoraLastError ? String(window.__agoraLastError) : ''; } catch {}
+          if (err && err.length > 260) err = err.slice(0, 260) + '…';
+          root.innerHTML =
+            '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">' +
+              '<div style="max-width:720px;width:100%;background:rgba(255,255,255,.92);border:1px solid rgba(15,23,42,.12);border-radius:16px;padding:18px 18px 16px;">' +
+                '<div style="font-weight:800;color:#0f172a;font-size:16px;margin-bottom:6px;">The app didn’t load</div>' +
+                '<div style="color:#475569;font-size:13px;line-height:1.6;margin-bottom:12px;">This is usually caused by a stale cache (especially on iPhone). Try Reload. If that doesn’t work, use Fix Cache + Reload.</div>' +
+                (err ? ('<div style="font-family:ui-monospace,Menlo,Monaco,Consolas,\\\"Liberation Mono\\\",\\\"Courier New\\\",monospace;font-size:12px;color:#64748b;background:rgba(15,23,42,.04);border:1px solid rgba(15,23,42,.08);border-radius:12px;padding:10px;margin-bottom:12px;overflow:auto;">' + err.replace(/</g,'&lt;') + '</div>') : '') +
+                '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+                  '<button onclick="location.reload()" style="padding:10px 14px;border-radius:12px;border:0;background:#0ea5e9;color:white;font-weight:800;cursor:pointer;">Reload</button>' +
+                  '<button onclick="(window.agoraFixAndReload && window.agoraFixAndReload())" style="padding:10px 14px;border-radius:12px;border:1px solid rgba(15,23,42,.14);background:white;color:#0f172a;font-weight:800;cursor:pointer;">Fix Cache + Reload</button>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+        } catch {}
+      }, 10000);
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
